@@ -23,6 +23,7 @@ class Lesson(models.Model):
     description = models.TextField(_("description"))
     preview = models.ImageField(_("preview"), upload_to='lesson_preview/', **NULLABLE)
     url = models.URLField(_("link to video"))
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, **NULLABLE)
 
     def __str__(self):
         return f'{self.title}'
