@@ -11,7 +11,7 @@ class LessonSerializer(serializers.ModelSerializer):
 
 
 class CourseSerializer(serializers.ModelSerializer):
-    lessons_count = serializers.IntegerField(source='lesson_set.count', required=False)
+    lessons_count = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
 
     class Meta:
@@ -24,4 +24,5 @@ class CourseSerializer(serializers.ModelSerializer):
             return lesson_list
         return 'There are no lessons in the course'
 
-
+    def get_lessons_count(self, obj):
+        return obj.lesson_set.count()
