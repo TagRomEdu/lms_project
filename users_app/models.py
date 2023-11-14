@@ -16,7 +16,7 @@ class User(AbstractUser):
     city = models.CharField(_("city"), **NULLABLE, max_length=100)
     avatar = models.ImageField(_("avatar"), **NULLABLE, upload_to='media/')
 
-    USERNAME_FIELD =  'email'
+    USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
 
     class Meta:

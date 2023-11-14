@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'rest_framework',
+    'rest_framework_simplejwt',
     'django_filters',
 
     'users_app',
@@ -141,3 +142,8 @@ AUTH_USER_MODEL = 'users_app.User'
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
+    'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
+}
