@@ -9,11 +9,17 @@ from education_app.serializers import CourseSerializer, LessonSerializer
 class CourseViewSet(viewsets.ModelViewSet):
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    permission_classes_by_action = {'update': [IsOwner, IsModerator],
+                                    'destroy': [IsOwner],
+                                    'retrieve': [IsOwner, IsModerator]
+                                    }
+
+    def get_permissions(self):
+        return [permission() for permission in self.permission_classes_by_action.get(self.action, [IsAuthenticated])]
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
     serializer_class = LessonSerializer
-
 
 
 class LessonListAPIView(generics.ListAPIView):
