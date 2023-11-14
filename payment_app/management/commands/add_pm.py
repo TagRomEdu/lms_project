@@ -8,7 +8,7 @@ from users_app.models import User
 class Command(BaseCommand):
     def handle(self, *args, **options):
         payment = Payment.objects.create(
-            user=User.objects.get(pk=1),
+            user=User.objects.get(pk=2),
             paid_course=Course.objects.get(pk=2),
             amount=100,
             method='cash'
