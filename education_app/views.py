@@ -1,6 +1,7 @@
 from rest_framework import viewsets, generics
 
 from education_app.models import Course, Lesson
+from education_app.permissions import IsModerator
 from education_app.serializers import CourseSerializer, LessonSerializer
 
 
@@ -26,6 +27,7 @@ class LessonRetrieveAPIView(generics.RetrieveAPIView):
 class LessonUpdateAPIView(generics.UpdateAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    permission_classes = [IsModerator]
 
 
 class LessonDestroyAPIView(generics.DestroyAPIView):
