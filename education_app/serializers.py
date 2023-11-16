@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from education_app.models import Course, Lesson
+from education_app.validators import DescriptionValidator
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -8,6 +9,7 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
+        validators = [DescriptionValidator(field='description')]
 
 
 class CourseSerializer(serializers.ModelSerializer):
@@ -17,6 +19,7 @@ class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
         fields = '__all__'
+        validators = [DescriptionValidator(field='description')]
 
     def get_lessons(self, obj):
         if obj.lesson_set.all():
