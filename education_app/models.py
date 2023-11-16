@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.db.models import UniqueConstraint
 from django.utils.translation import gettext_lazy as _
 
 from users_app.models import NULLABLE, User
@@ -38,4 +39,8 @@ class Lesson(models.Model):
 class Subscription(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    is_active = models.BooleanField(default=False)
+
+    class Meta:
+        constraints = [
+            UniqueConstraint(fields=['user', 'course'], name='unique_subscription')
+        ]
