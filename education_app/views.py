@@ -2,6 +2,7 @@ from rest_framework import viewsets, generics
 from rest_framework.permissions import IsAuthenticated
 
 from education_app.models import Course, Lesson
+from education_app.paginators import EducationPaginator
 from education_app.permissions import IsModerator, IsOwner
 from education_app.serializers import CourseSerializer, LessonSerializer
 
@@ -13,6 +14,7 @@ class CourseViewSet(viewsets.ModelViewSet):
                                     'destroy': [IsOwner],
                                     'retrieve': [IsOwner, IsModerator]
                                     }
+    pagination_class = EducationPaginator
 
     def get_permissions(self):
         return [permission() for permission in self.permission_classes_by_action.get(self.action, [IsAuthenticated])]
@@ -25,6 +27,7 @@ class LessonCreateAPIView(generics.CreateAPIView):
 class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
+    pagination_class = EducationPaginator
 
 
 class LessonRetrieveAPIView(generics.RetrieveAPIView):
