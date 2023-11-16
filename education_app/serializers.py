@@ -1,6 +1,13 @@
 from rest_framework import serializers
 
-from education_app.models import Course, Lesson
+from education_app.models import Course, Lesson, Subscription
+from education_app.validators import DescriptionValidator
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
 
 
 class LessonSerializer(serializers.ModelSerializer):
@@ -8,15 +15,18 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = '__all__'
+        validators = [DescriptionValidator(field='description')]
 
 
 class CourseSerializer(serializers.ModelSerializer):
     lessons_count = serializers.SerializerMethodField()
     lessons = serializers.SerializerMethodField()
+    subscription = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = '__all__'
+        validators = [DescriptionValidator(field='description')]
 
     def get_lessons(self, obj):
         if obj.lesson_set.all():
@@ -26,3 +36,8 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         return obj.lesson_set.count()
+
+    def get_subscription(self, obj):
+        if obj.subscription_set.all():
+            return True
+        return 'Неть подписки на обновления курса'
