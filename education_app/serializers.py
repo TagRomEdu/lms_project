@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from education_app.models import Course, Lesson
+from education_app.models import Course, Lesson, Subscription
 from education_app.validators import DescriptionValidator
 
 
@@ -29,3 +29,9 @@ class CourseSerializer(serializers.ModelSerializer):
 
     def get_lessons_count(self, obj):
         return obj.lesson_set.count()
+
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Subscription
+        fields = '__all__'
