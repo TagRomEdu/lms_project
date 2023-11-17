@@ -28,11 +28,6 @@ class LessonTestCase(APITestCase):
             owner=self.user
         )
 
-        self.subscription = Subscription.objects.create(
-            course=self.course,
-            user=self.user
-        )
-
         self.client = APIClient()
         self.client.force_authenticate(user=self.user)
 
@@ -113,3 +108,47 @@ class LessonTestCase(APITestCase):
         self.assertEquals(response.status_code,
                           status.HTTP_204_NO_CONTENT
                           )
+
+
+class SubscriptionTestCase(APITestCase):
+    def setUp(self):
+        self.user = User.objects.create(
+            email='test@test.ru',
+            first_name='Test',
+            last_name='Testov'
+        )
+
+        self.course = Course.objects.create(
+            title='test',
+            description='Test course',
+            owner=self.user
+        )
+
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
+
+    def test_subscribe_to_course(self):
+
+        """Subscription creating and adding to course test"""
+
+        response = self.client.post('/education/courses/6/subscribe/')
+        is_subscribe = Course.objects.all()[0].subscription_set.all().first()
+
+        self.assertEquals(response.status_code,
+                          status.HTTP_201_CREATED
+                          )
+
+        self.assertTrue(is_subscribe)
+
+    def test_unsubscribe_from_course(self):
+
+        """Subscription deleting test"""
+
+        response = self.client.delete('/education/courses/7/unsubscribe/')
+        is_subscribe = Course.objects.all()[0].subscription_set.all().first()
+
+        self.assertEquals(response.status_code,
+                          status.HTTP_204_NO_CONTENT
+                          )
+
+        self.assertFalse(is_subscribe)
