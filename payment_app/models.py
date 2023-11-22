@@ -13,3 +13,4 @@ class Payment(models.Model):
     amount = models.PositiveIntegerField(_("payment amount"))
     method = models.CharField(_("payment method"), choices=[('cash', 'Наличные'), ('transfer', 'Перевод денег')],
                               max_length=20)
+    stripe_id = models.CharField(_("link to payment"), **NULLABLE)
