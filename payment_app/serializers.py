@@ -32,5 +32,5 @@ class PaymentCreateSerializer(serializers.ModelSerializer):
             automatic_payment_methods={"enabled": True},
             description=description
         ).id
-
+        new_payment.save()
         return new_payment
