@@ -4,7 +4,11 @@ from rest_framework import generics
 from rest_framework.filters import OrderingFilter
 
 from payment_app.models import Payment
-from payment_app.serializers import PaymentSerializer
+from payment_app.serializers import PaymentSerializer, PaymentCreateSerializer
+
+
+class PaymentCreateAPIView(generics.CreateAPIView):
+    serializer_class = PaymentCreateSerializer
 
 
 class PaymentListAPIView(generics.ListAPIView):
