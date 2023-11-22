@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'django_filters',
+    'drf_yasg',
 
     'users_app',
     'education_app',
@@ -146,4 +147,14 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': ('rest_framework_simplejwt.authentication.JWTAuthentication',),
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
+}
+
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header',
+        },
+    },
 }
