@@ -173,3 +173,9 @@ CELERY_TASK_TRACK_STARTED = True
 
 # Максимальное время на выполнение задачи
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'm@sster.ru'
+EMAIL_HOST_PASSWORD = os.getenv('YA_PASS')
+EMAIL_USE_SSL = True
