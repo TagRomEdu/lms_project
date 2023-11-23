@@ -38,6 +38,6 @@ class CourseSerializer(serializers.ModelSerializer):
         return obj.lesson_set.count()
 
     def get_subscription(self, obj):
-        if obj.subscription_set.all():
+        if obj.subscription_set.exists():
             return True
         return 'Неть подписки на обновления курса'
