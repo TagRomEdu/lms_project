@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+from datetime import timedelta
 
 import dotenv
 from pathlib import Path
@@ -45,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'django_filters',
     'drf_yasg',
+    'django_celery_beat',
 
     'users_app',
     'education_app',
@@ -149,6 +151,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework.permissions.IsAuthenticated']
 }
 
+CACHE_ENABLED = os.getenv('CACHE_ENABLED') == 'True'
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': os.getenv('CACHE_LOCATED'),
+    }
+}
+
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
         'Bearer': {
@@ -157,4 +167,31 @@ SWAGGER_SETTINGS = {
             'in': 'header',
         },
     },
+}
+
+CELERY_BROKER_URL = 'redis://localhost:6379'  # Например, Redis, который по умолчанию работает на порту 6379
+
+# URL-адрес брокера результатов, также Redis
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+# Часовой пояс для работы Celery
+CELERY_TIMEZONE = "Australia/Tasmania"
+
+# Флаг отслеживания выполнения задач
+CELERY_TASK_TRACK_STARTED = True
+
+# Максимальное время на выполнение задачи
+CELERY_TASK_TIME_LIMIT = 1 * 60
+
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'm@sster.ru'
+EMAIL_HOST_PASSWORD = os.getenv('YA_PASS')
+EMAIL_USE_SSL = True
+
+CELERY_BEAT_SCHEDULE = {
+    'task-name': {
+        'task': 'users_app.tasks.check_user_activity',
+        'schedule': timedelta(days=1)
+    }
 }

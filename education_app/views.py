@@ -3,10 +3,13 @@ from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from config import settings
 from education_app.models import Course, Lesson, Subscription
 from education_app.paginators import EducationPaginator
 from education_app.permissions import IsModerator, IsOwner
 from education_app.serializers import CourseSerializer, LessonSerializer
+from education_app.tasks import send_update_message
+from users_app.models import User
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -32,6 +35,17 @@ class CourseViewSet(viewsets.ModelViewSet):
         course = self.get_object()
         Subscription.objects.filter(user=request.user, course=course).delete()
         return Response({'detail': 'Subscription deleted'}, status=status.HTTP_204_NO_CONTENT)
+
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+
+        updated_course = serializer.instance
+        if updated_course.subscription_set.exists():
+            email = settings.EMAIL_HOST_USER
+            title = updated_course.title
+            subscriber_list = list(User.objects.filter(subscription__course=updated_course).values_list('email',
+                                                                                                        flat=True))
+            send_update_message.delay(title, subscriber_list, email)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
