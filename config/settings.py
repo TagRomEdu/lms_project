@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
+from datetime import timedelta
 
 import dotenv
 from pathlib import Path
@@ -187,3 +188,10 @@ EMAIL_PORT = 465
 EMAIL_HOST_USER = 'm@sster.ru'
 EMAIL_HOST_PASSWORD = os.getenv('YA_PASS')
 EMAIL_USE_SSL = True
+
+CELERY_BEAT_SCHEDULE = {
+    'task-name': {
+        'task': 'users_app.tasks.check_user_activity',
+        'schedule': timedelta(days=1)
+    }
+}
