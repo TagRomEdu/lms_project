@@ -43,11 +43,8 @@ class CourseViewSet(viewsets.ModelViewSet):
         if updated_course.subscription_set.exists():
             email = settings.EMAIL_HOST_USER
             title = updated_course.title
-            subscriber_list = list(User.objects.filter(subscription__course=updated_course).values_list('email', flat=True))
-            '''subscriber_list = [User.objects.get(pk=sub.user_id).email for sub in
-                               Course.objects.get(pk=updated_course.id).subscription_set.all()]'''
-
-
+            subscriber_list = list(User.objects.filter(subscription__course=updated_course).values_list('email',
+                                                                                                        flat=True))
             send_update_message.delay(title, subscriber_list, email)
 
 
