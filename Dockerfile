@@ -1,5 +1,7 @@
 FROM python:3.11
 
+RUN pipx install poetry
+
 WORKDIR / docker_test
 
 COPY ./pyproject.toml .
