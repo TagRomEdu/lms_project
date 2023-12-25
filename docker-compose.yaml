@@ -4,9 +4,12 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Tyjnbr888
-      POSTGRES_DB: lms_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=Tyjnbr888
+      - POSTGRES_DB=lms_db
+      - PG_DATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./backup.sql:/docker-entrypoint-initdb.d/backup.sql
     ports:
       - '5433:5432'
 
@@ -14,10 +17,13 @@ services:
     env_file:
       - .env
     build: .
-    command: python manage.py runserver
+    command: python manage.py nigrate && python manage.py runserver 0.0.0.0:8000 
     volumes:
-      - .:/app
+      - .:/code
     ports:
       - '8001:8000'
     depends_on:
       - db
+
+volumes:
+  pg_data:
