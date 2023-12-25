@@ -93,7 +93,7 @@ DATABASES = {
         'NAME': 'lms_db',
         'USER': 'postgres',
         'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'db'
+        'PORT': 'db',
     }
 }
 
